@@ -1,0 +1,291 @@
+@import '/src/scss/variables';
+
+@mixin flex($posJustify, $posAlign) {
+  display: flex;
+  justify-content: $posJustify;
+  align-items: $posAlign;
+}
+$color: #c4c4c4;
+
+@mixin svgHover($color, $hoverColor) {
+  svg {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    path {
+      transition: all 0.2s ease-in-out;
+      stroke: $color;
+      fill: $color;
+    }
+    circle {
+      transition: all 0.2s ease-in-out;
+      stroke: $color;
+    }
+    &:hover {
+      path {
+        stroke: $hoverColor;
+        fill: $hoverColor;
+      }
+      circle {
+        stroke: $hoverColor;
+      }
+    }
+  }
+}
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 820px;
+  margin: 40px auto;
+  &_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    div:first-child {
+      @include flex(space-between, center);
+      h1 {
+        font-size: 32px;
+      }
+      img {
+        margin-right: 10px;
+      }
+    }
+
+    div:last-child {
+      @include flex(space-between, center);
+      padding: 5px 15px;
+      border-radius: 22px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      svg {
+        margin-right: 10px;
+        path {
+          transition: all 0.2s ease-in-out;
+        }
+      }
+      span {
+        color: $color;
+        transition: all 0.2s ease-in-out;
+      }
+      &:hover {
+        span {
+          color: rgb(0, 0, 0);
+        }
+        svg {
+          path {
+            stroke: rgb(0, 0, 0);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .cart {
+    width: auto;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .pizza {
+    flex-direction: column;
+    div:first-child {
+      flex-direction: column;
+    }
+    div:last-child {
+      flex-direction: column;
+    }
+    &_added {
+      flex-direction: row !important;
+      margin-left: 0 !important;
+      align-items: center !important;
+      flex-grow: 1;
+      span {
+        font-size: 30px;
+        margin: 20px;
+      }
+    }
+
+    &_info {
+      img {
+        width: 130px !important;
+        height: 130px !important;
+      }
+      &_descr {
+        h2 {
+          font-size: 22px;
+          font-weight: bold;
+          margin-top: 20px;
+        }
+        p {
+          margin: 20px auto;
+        }
+      }
+    }
+    &_price {
+      h2 {
+        margin: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .cart_top {
+    flex-direction: column;
+    div:last-child {
+      margin-top: 30px;
+    }
+  }
+
+  .buying {
+    flex-direction: column;
+    button {
+      margin-top: 10px !important;
+    }
+    &_btn_buy {
+      margin-top: 40px;
+      align-items: center !important;
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .pizza_info_descr {
+    h2 {
+      font-size: 18px !important;
+    }
+  }
+  .buying {
+    p {
+      font-size: 16px !important;
+    }
+  }
+}
+
+.pizza {
+  margin-top: 40px;
+  box-shadow: 0px 1px 15px #ccc;
+  padding: 10px 15px;
+  border-radius: 22px;
+  @include flex(space-between, center);
+  div:first-child {
+    @include flex(space-between, center);
+    flex-grow: 0.355;
+  }
+  div:last-child {
+    @include flex(space-between, center);
+    flex-grow: 0.3;
+  }
+
+  &_info {
+    img {
+      width: 80px;
+      height: 80px;
+    }
+    &_descr {
+      flex-direction: column;
+      align-items: flex-start !important;
+      h2 {
+        font-size: 22px;
+        font-weight: bold;
+      }
+      p {
+        color: #8d8d8d;
+        font-size: 18px;
+      }
+    }
+  }
+
+  &_added {
+    margin-left: 25px;
+    span {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    @include svgHover(rgb(0, 21, 255), black);
+  }
+
+  &_price {
+    @include svgHover($color, black);
+  }
+}
+
+.buying {
+  margin-top: 40px;
+  @include flex(space-between, center);
+  div:first-child {
+    @include flex(flex-start, flex-start);
+    flex-direction: column;
+  }
+  div:last-child {
+    @include flex(flex-end, flex-end);
+    flex-direction: column;
+  }
+  button {
+    padding: 10px 22px;
+    border-radius: 22px;
+    margin-top: 30px;
+  }
+  p {
+    font-size: 22px;
+    b {
+      font-size: 22px;
+
+      margin-left: 10px;
+    }
+  }
+
+  &_btn_back {
+    @include flex(space-between, center);
+    border: 1px solid #0000004f;
+    transition: all 0.2s ease-in-out;
+    span {
+      color: $color;
+      transition: all 0.2s ease-in-out;
+    }
+    svg {
+      transition: all 0.2s ease-in-out;
+      margin-right: 10px;
+      path {
+        transition: all 0.2s ease-in-out;
+      }
+    }
+    &:hover {
+      svg {
+        path {
+          stroke: #000;
+        }
+      }
+      span {
+        color: black;
+      }
+      border: 1px solid #000000;
+    }
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  &_btn_buy {
+    p {
+      b {
+        color: $orange;
+      }
+    }
+    button {
+      background-color: $orange;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+      &:hover {
+        background-color: darken($color: $orange, $amount: 20);
+      }
+    }
+  }
+}
