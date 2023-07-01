@@ -3,17 +3,15 @@ import { useClickOutside } from '../hooks/useClickOutside';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeOrder, changeSortType } from '../toolkit/filterSlice';
 
-const SortPizza = ({ actualSortPizzaObj }) => {
+const SortPizza = () => {
   const [isActivePopPup, setActivePopPup] = React.useState(false);
 
-  const { sortPizza, isOrder } = useSelector((state) => state.filter);
+  const { sortPizza, isOrder, currentSObj } = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
-  const setActiveHandler = (type) => {
-    console.log('type: ', type);
+  const setActiveHandler = (obj) => {
     dispatch(changeOrder());
-    dispatch(changeSortType(type));
-    // sortingPizza(type);
+    dispatch(changeSortType(obj));
     setActivePopPup((prev) => !prev);
   };
   let domNode = useClickOutside(() => {
@@ -36,7 +34,7 @@ const SortPizza = ({ actualSortPizzaObj }) => {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span>ddd</span>
+          <span>{currentSObj.sortTitle}</span>
         </div>
         {isActivePopPup && (
           <div className="sort__popup" onClick={() => setActivePopPup((prev) => !prev)}>
@@ -46,11 +44,15 @@ const SortPizza = ({ actualSortPizzaObj }) => {
                   <li
                     key={index}
                     onClick={() => {
-                      setActiveHandler(obj.sortType);
+                      setActiveHandler(obj);
                     }}
-                    className="active">
+                    className={obj.sortTitle === currentSObj.sortTitle ? 'active' : ''}>
                     {obj.sortTitle}
-                    {obj.sortTitle === actualSortPizzaObj.sortTitle && isOrder ? (
+                    {obj.sortTitle === currentSObj.sortTitle && isOrder ? (
+                      <svg id="Outline" viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M6.41,16H17.59a1,1,0,0,0,.7-1.71L12.71,8.71a1,1,0,0,0-1.42,0L5.71,14.29A1,1,0,0,0,6.41,16Z" />
+                      </svg>
+                    ) : (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         id="Outline"
@@ -58,10 +60,6 @@ const SortPizza = ({ actualSortPizzaObj }) => {
                         width="20"
                         height="20">
                         <path d="M6.41,9H17.59a1,1,0,0,1,.7,1.71l-5.58,5.58a1,1,0,0,1-1.42,0L5.71,10.71A1,1,0,0,1,6.41,9Z" />
-                      </svg>
-                    ) : (
-                      <svg id="Outline" viewBox="0 0 24 24" width="20" height="20">
-                        <path d="M6.41,16H17.59a1,1,0,0,0,.7-1.71L12.71,8.71a1,1,0,0,0-1.42,0L5.71,14.29A1,1,0,0,0,6.41,16Z" />
                       </svg>
                     )}
                   </li>

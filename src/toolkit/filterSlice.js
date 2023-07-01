@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  idC: 0,
+  idC: -1,
   categories: ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'],
   sortPizza: [
     {
@@ -18,7 +18,10 @@ const initialState = {
     },
   ],
   isOrder: false,
-  currentSType: '',
+  currentSObj: {
+    sortTitle: 'популярности',
+    sortType: 'rating',
+  },
 };
 
 export const filterSlice = createSlice({
@@ -33,7 +36,7 @@ export const filterSlice = createSlice({
     },
     changeSortType: (state, { payload }) => {
       console.log('payload: ', payload);
-      state.currentSType = payload;
+      state.currentSObj = payload;
     },
   },
 });
