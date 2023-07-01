@@ -35,6 +35,10 @@ body {
     justify-content: center;
     align-items: center;
     gap: 40px;
+    .search_empty {
+      height: 400px;
+      overflow: hidden;
+    }
   }
 
   &__top {
@@ -43,6 +47,7 @@ body {
     justify-content: space-between;
     flex-wrap: wrap;
     row-gap: 40px;
+    margin-top: 24px;
   }
 }
 

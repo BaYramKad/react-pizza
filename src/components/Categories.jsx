@@ -1,15 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const Categories = () => {
-  const [idLi, setActiveId] = React.useState(0);
-  const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-
+const Categories = ({ filterCategory }) => {
+  const { categories, idC } = useSelector((state) => state.filter);
   return (
     <div className="categories">
       <ul>
-        {categories.map((item, i) => {
+        {categories.map((item, index) => {
           return (
-            <li key={i} onClick={() => setActiveId(i)} className={idLi === i ? 'active' : ''}>
+            <li
+              className={idC === index ? 'active' : ''}
+              key={index}
+              onClick={() => filterCategory(index)}>
               {item}
             </li>
           );

@@ -4,6 +4,7 @@ const CardPizza = ({ imageUrl, title, types, sizes, price }) => {
   const [isActiveType, setActiveType] = React.useState(0);
   const [isActiveSize, setActiveSize] = React.useState(0);
   const typesPizza = ['тонкое', 'традиционное'];
+
   return (
     <div className="pizza-block">
       <img className="pizza-block__image" src={imageUrl} alt="Pizza" />

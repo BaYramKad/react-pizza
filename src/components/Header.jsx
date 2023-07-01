@@ -1,8 +1,13 @@
 import React from 'react';
-import logo from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+import logo from '../assets/img/pizza-logo.svg';
+
+import Search from './Search';
+
+const Header = (props) => {
+  console.log('propsHeader: ', props);
+
   return (
     <div className="header">
       <div className="container">
@@ -13,6 +18,7 @@ const Header = () => {
             <p>самая вкусная пицца во вселенной</p>
           </div>
         </Link>
+        <Search />
         <div className="header__cart">
           <Link to={'/cart'} href="/cart.html" className="button button--cart">
             <span>520 ₽</span>
