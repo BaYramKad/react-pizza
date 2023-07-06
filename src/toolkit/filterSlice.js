@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  idC: -1,
+  idC: 0,
   categories: ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'],
   sortPizza: [
     {
@@ -35,12 +35,16 @@ export const filterSlice = createSlice({
       state.isOrder = !state.isOrder;
     },
     changeSortType: (state, { payload }) => {
-      console.log('payload: ', payload);
       state.currentSObj = payload;
+    },
+    setParseObjUrl: (state, { payload }) => {
+      state.currentSObj = payload.sortBy;
+      state.idC = +payload.category;
+      state.isOrder = payload.order;
     },
   },
 });
 
-export const { setCategoryId, changeOrder, changeSortType } = filterSlice.actions;
+export const { setCategoryId, changeOrder, changeSortType, setParseObjUrl } = filterSlice.actions;
 
 export default filterSlice.reducer;

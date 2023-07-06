@@ -1,9 +1,27 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setItemsCart } from '../../toolkit/pizzaSlice';
 
-const CardPizza = ({ imageUrl, title, types, sizes, price }) => {
+const CardPizza = ({ id, imageUrl, title, types, sizes, price }) => {
+  const dispatch = useDispatch();
+  const { type } = useSelector((state) => state.pizzaCart);
   const [isActiveType, setActiveType] = React.useState(0);
   const [isActiveSize, setActiveSize] = React.useState(0);
-  const typesPizza = ['тонкое', 'традиционное'];
+  let [count, setCount] = React.useState(0);
+
+  const onClickPizzaToCart = () => {
+    setCount((prev) => prev + 1);
+    const cartPizza = {
+      imageUrl,
+      title,
+      price,
+      id,
+      type: isActiveType,
+      size: isActiveSize,
+    };
+
+    dispatch(setItemsCart(cartPizza));
+  };
 
   return (
     <div className="pizza-block">
@@ -11,13 +29,13 @@ const CardPizza = ({ imageUrl, title, types, sizes, price }) => {
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          {types.map((type, i) => {
+          {type.map((type, i) => {
             return (
               <li
                 key={i}
                 onClick={() => setActiveType(i)}
                 className={isActiveType === i ? 'active' : ''}>
-                {typesPizza[i]}
+                {type}
               </li>
             );
           })}
@@ -37,7 +55,7 @@ const CardPizza = ({ imageUrl, title, types, sizes, price }) => {
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">от {price} ₽</div>
-        <div className="button button--outline button--add">
+        <div onClick={() => onClickPizzaToCart()} className="button button--outline button--add">
           <svg
             width="12"
             height="12"
@@ -50,7 +68,7 @@ const CardPizza = ({ imageUrl, title, types, sizes, price }) => {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
+          {count > 0 && <i>{count}</i>}
         </div>
       </div>
     </div>

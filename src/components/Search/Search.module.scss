@@ -26,4 +26,18 @@
     width: 20px;
     height: 20px;
   }
+  &_empty_items {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    color: rgb(228, 10, 10);
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .search_empty_items {
+    font-size: 12px;
+  }
 }

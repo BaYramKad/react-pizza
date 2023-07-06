@@ -1,49 +1,85 @@
 import React from 'react';
-import axios from 'axios';
 
 import Categories from '../components/Categories';
 import SortPizza from '../components/SortPizza';
 import CardPizza from '../components/CardPizza';
 import CardPizzaSceleton from '../components/CardPizza/CardPizzaSceleton';
+import ErrorPage from './ErrorPage';
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import qs from 'qs';
 
 import { setPage } from '../toolkit/paginationSlice';
+import { asyncLoadPizza } from '../toolkit/asyncLoadPizza/pizzaSlice';
+import { setParseObjUrl } from '../toolkit/filterSlice';
 
 const Main = () => {
   const dispatch = useDispatch();
-  const { idC, categories, isOrder, currentSObj } = useSelector((state) => state.filter);
+  const navigate = useNavigate();
+  const { idC, categories, isOrder, currentSObj, sortPizza } = useSelector((state) => state.filter);
+  const { pizza, loading, error } = useSelector((state) => state.pizzaLoad);
+  const { searchPizza } = useSelector((state) => state.search);
   const currentPage = useSelector((state) => state.pagination.page);
   const title = categories[idC];
+  const isFetching = React.useRef(false);
+  const isMounted = React.useRef(false);
 
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const url = 'https://649b279bbf7c145d023a142d.mockapi.io/items?limit=5';
-
-  React.useEffect(() => {
-    const filterCategory = idC > 0 ? `&category=${idC}` : '';
-    const sortPizza = `&sortBy=${currentSObj.sortType}`;
-    const order = `${currentSObj && '&'}order=${isOrder ? 'asc' : 'desc'}`;
-
-    setIsLoading(true);
-    axios.get(`${url}${sortPizza}${filterCategory}${order}`).then((res) => {
-      setItems(res.data);
-      setIsLoading(false);
-    });
-  }, [currentSObj, isOrder, idC]);
+  const fetchPizza = () => {
+    const { sortType } = currentSObj;
+    const order = isOrder ? 'asc' : 'desc';
+    const category = idC < 1 ? '' : `&category=${idC}`;
+    const search = { category, sortType, order, currentPage };
+    dispatch(asyncLoadPizza(search));
+  };
 
   React.useEffect(() => {
-    setIsLoading(true);
-    axios.get(`${url}&page=${currentPage}`).then((res) => {
-      setItems(res.data);
-      setIsLoading(false);
-    });
-  }, [currentPage]);
+    if (window.location.search) {
+      const urlBrowser = window.location.search.slice(1);
+      const urlParse = qs.parse(urlBrowser);
+      const currentSortObj = sortPizza.find((item) => item.sortType === urlParse.sortBy);
+
+      dispatch(
+        setParseObjUrl({
+          ...urlParse,
+          sortBy: { ...currentSortObj },
+        }),
+      );
+      isFetching.current = true;
+    }
+  }, []);
+  React.useEffect(() => {
+    if (!isFetching.current) {
+      fetchPizza();
+    }
+    isFetching.current = false;
+  }, [idC, currentSObj, isOrder, currentPage]);
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const searchObj = {
+        category: idC.toString(),
+        sortBy: currentSObj.sortType.toString(),
+        order: isOrder,
+      };
+
+      const result = qs.stringify(searchObj);
+      navigate('?' + result);
+    }
+
+    isMounted.current = true;
+  }, [idC, isOrder, currentSObj.sortType, currentPage]);
 
   const sceleton = [...new Array(4)].map((_, i) => <CardPizzaSceleton key={i} />);
-  const pizzas = items.map((obj) => <CardPizza key={obj.title} {...obj} />);
+  const arrayPizza = (searchPizza.length > 0 ? searchPizza : pizza).map((obj) => (
+    <CardPizza key={obj.title} {...obj} />
+  ));
+
+  if (error) {
+    return <ErrorPage />;
+  }
 
   return (
     <>
@@ -52,21 +88,18 @@ const Main = () => {
         <SortPizza />
       </div>
       <h2 className="content__title">{title && `${title} Пиццы`}</h2>
-      <div className="content__items">
-        {isLoading ? sceleton : pizzas}
-        {pizzas.length > 0 ? (
-          ''
-        ) : (
-          <div className="search_empty">
-            <h2>По запросу ничего не найдено!</h2>
-          </div>
-        )}
-      </div>
+      <div className="content__items">{loading ? sceleton : arrayPizza}</div>
+
       <Stack spacing={2}>
         <Pagination
           page={currentPage}
           onChange={(_, pageNum) => dispatch(setPage(pageNum))}
-          sx={'margin: auto; margin-top: 50px'}
+          sx={() => {
+            return {
+              margin: 'auto',
+              marginTop: '50px',
+            };
+          }}
           count={2}
           color="primary"
         />

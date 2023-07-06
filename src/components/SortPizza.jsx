@@ -7,6 +7,7 @@ const SortPizza = () => {
   const [isActivePopPup, setActivePopPup] = React.useState(false);
 
   const { sortPizza, isOrder, currentSObj } = useSelector((state) => state.filter);
+
   const dispatch = useDispatch();
 
   const setActiveHandler = (obj) => {

@@ -2,13 +2,14 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from './Header';
+import { useSelector } from 'react-redux';
 
 const Layout = (props) => {
-  console.log('LAYOUT RENDER');
+  const { error } = useSelector((state) => state.pizzaLoad);
 
   return (
     <>
-      <Header />
+      {!error && <Header />}
       <Outlet />
     </>
   );
