@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import cartIcon from '../../assets/img/cart/cart-icon.svg';
 
@@ -7,11 +7,12 @@ import styles from './CartPage.module.scss';
 
 import EmptyCart from './EmptyCart';
 import CartPizza from '../../components/CartPizza';
-import { clearCart } from '../../toolkit/pizzaSlice';
+import { clearCart, takeInfoSelector } from '../../toolkit/pizzaSlice';
+import { useAppDispatch } from '../../toolkit/store';
 
 const Cart = () => {
-  const { items, countPizza, totalAmount } = useSelector((state) => state.pizzaCart);
-  const dispatch = useDispatch();
+  const { items, countPizza, totalAmount } = useSelector(takeInfoSelector);
+  const dispatch = useAppDispatch();
 
   const onClearCart = () => {
     dispatch(clearCart());
@@ -74,7 +75,7 @@ const Cart = () => {
         </div>
       </div>
       <div className={styles.cart_scroll}>
-        {items.map((item) => (
+        {items.map((item: any) => (
           <CartPizza key={item.id} {...item} />
         ))}
       </div>

@@ -1,22 +1,33 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styles from './../pages/CartPage/CartPage.module.scss';
-import { deleteItem, setItemsCart, incrementItem } from '../toolkit/pizzaSlice';
+import { deleteItem, setItemsCart, incrementItem, cartPizzaSelector } from '../toolkit/pizzaSlice';
+import { useAppDispatch } from '../toolkit/store';
 
-const CartPizza = ({ id, count, imageUrl, title, type, size }) => {
-  const dispatch = useDispatch();
-  const currentPizza = useSelector((state) => state.pizzaCart.items.find((item) => item.id === id));
+type CartPizzaType = {
+  id: number;
+  count: number;
+  imageUrl: string;
+  title: string;
+  type: number;
+  size: number;
+};
 
-  const onRemoveItem = (id) => {
+const CartPizza: React.FC<CartPizzaType> = ({ id, count, imageUrl, title, type, size }) => {
+  const dispatch = useAppDispatch();
+  const currentPizza = useSelector(cartPizzaSelector(id));
+
+  const onRemoveItem = (id: number) => {
     dispatch(deleteItem(id));
   };
-  const onAddCountItem = (id) => {
+  const onAddCountItem = (id: number) => {
     dispatch(
       setItemsCart({
         id,
+        count,
       }),
     );
   };
-  const onIncrementItem = (id) => {
+  const onIncrementItem = (id: number) => {
     dispatch(incrementItem(id));
   };
   return (
@@ -35,7 +46,6 @@ const CartPizza = ({ id, count, imageUrl, title, type, size }) => {
           {count > 1 && (
             <svg
               onClick={() => onIncrementItem(id)}
-              disabled="true"
               width="32"
               height="32"
               viewBox="0 0 32 32"
@@ -88,7 +98,7 @@ const CartPizza = ({ id, count, imageUrl, title, type, size }) => {
       </div>
       <div className={styles.pizza_price}>
         <h2>
-          {currentPizza.price * count} <b>&#8381;</b>
+          {currentPizza && currentPizza.price * count} <b>&#8381;</b>
         </h2>
         <svg
           onClick={() => onRemoveItem(id)}

@@ -8,8 +8,6 @@ import Error from './pages/ErrorPage';
 import Cart from './pages/CartPage';
 import Layout from './components/Layout';
 
-export const MyContext = React.createContext();
-
 function App() {
   return (
     <div className="wrapper">

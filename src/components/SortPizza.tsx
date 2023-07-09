@@ -1,18 +1,19 @@
 import React from 'react';
 import { useClickOutside } from '../hooks/useClickOutside';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeOrder, changeSortType } from '../toolkit/filterSlice';
+import { useSelector } from 'react-redux';
+import { changeOrder, changeSortType, filterSelector } from '../toolkit/filterSlice';
+import { useAppDispatch } from '../toolkit/store';
 
-const SortPizza = () => {
+const SortPizza: React.FC = () => {
   const [isActivePopPup, setActivePopPup] = React.useState(false);
 
-  const { sortPizza, isOrder, currentSObj } = useSelector((state) => state.filter);
+  const { sortPizza, isOrder, sortType } = useSelector(filterSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const setActiveHandler = (obj) => {
+  const setActiveHandler = (obj: object) => {
     dispatch(changeOrder());
-    dispatch(changeSortType(obj));
+    // dispatch(changeSortType(''));
     setActivePopPup((prev) => !prev);
   };
   let domNode = useClickOutside(() => {
@@ -35,21 +36,21 @@ const SortPizza = () => {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span>{currentSObj.sortTitle}</span>
+          <span>{sortType}</span>
         </div>
         {isActivePopPup && (
           <div className="sort__popup" onClick={() => setActivePopPup((prev) => !prev)}>
             <ul>
-              {sortPizza.map((obj, index) => {
+              {sortPizza.map((obj: any, index: number) => {
                 return (
                   <li
                     key={index}
                     onClick={() => {
                       setActiveHandler(obj);
                     }}
-                    className={obj.sortTitle === currentSObj.sortTitle ? 'active' : ''}>
+                    className={obj.sortType === sortType ? 'active' : ''}>
                     {obj.sortTitle}
-                    {obj.sortTitle === currentSObj.sortTitle && isOrder ? (
+                    {obj.sortType === sortType && isOrder ? (
                       <svg id="Outline" viewBox="0 0 24 24" width="20" height="20">
                         <path d="M6.41,16H17.59a1,1,0,0,0,.7-1.71L12.71,8.71a1,1,0,0,0-1.42,0L5.71,14.29A1,1,0,0,0,6.41,16Z" />
                       </svg>

@@ -5,26 +5,26 @@ import empty from '../../assets/img/close.svg';
 import debounce from 'lodash.debounce';
 
 import styles from './Search.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { asyncSearchPizza } from '../../toolkit/asyncSearchSlice/asyncSearch';
+import { useSelector } from 'react-redux';
+import { asyncSearchPizza, searchSelector } from '../../toolkit/asyncSearchSlice/asyncSearch';
+import { useAppDispatch } from '../../toolkit/store';
 
-const Search = () => {
+const Search: React.FC = () => {
   const [value, setValue] = React.useState('');
-  const [isQuery, setisQuery] = React.useState(false);
-  const refClose = React.useRef();
-  const dispatch = useDispatch();
-  const searchPizza = useSelector((state) => state.search.searchPizza);
-  console.log('searchPizza: ', searchPizza);
+  // const [isQuery, setisQuery] = React.useState(false);
+  const refClose = React.useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+  const { searchPizza } = useSelector(searchSelector);
 
   const debounFoo = React.useCallback(
-    debounce((str) => {
+    debounce((str: string) => {
       dispatch(asyncSearchPizza(str));
-      setisQuery((prev) => true);
+      // setisQuery((prev) => true);
     }, 250),
     [],
   );
 
-  const searchHandler = (event) => {
+  const searchHandler = (event: any) => {
     let str = event.target.value.trim();
     setValue(str);
     debounFoo(str);
@@ -32,7 +32,7 @@ const Search = () => {
 
   const clearValue = () => {
     setValue('');
-    refClose.current.focus();
+    refClose.current?.focus();
     dispatch(asyncSearchPizza(''));
   };
 
@@ -51,14 +51,13 @@ const Search = () => {
         </g>
       </svg>
       <input
-        data-hello="hello"
         ref={refClose}
         value={value}
         onChange={searchHandler}
         type="text"
         placeholder="Поиск пицц..."
       />
-      {value && searchPizza <= 0 && (
+      {value && searchPizza.length <= 0 && (
         <span className={styles.search_empty_items}>По запросу "{value}" ничего не найдено</span>
       )}
 
