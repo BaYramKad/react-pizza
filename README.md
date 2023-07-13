@@ -1,3 +1,3 @@
-# React/React-Redux/Redux-Toolkit/TypeScript
-# SCSS(Modules), Skeleton, AsyncThunk, debounce, 
+React/React-Redux/Redux-Toolkit/TypeScript/React-router-dom/React-hooks
+SCSS(Modules), Skeleton, AsyncThunk, lodash(debounce), 
 
