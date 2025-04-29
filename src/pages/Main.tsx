@@ -44,6 +44,7 @@ const Main: React.FC = () => {
     dispatch(asyncLoadPizza(search));
   };
   console.log('Вкусная пицца');
+  console.log('Вкусная пицца 2222');
 
   React.useEffect(() => {
     if (window.location.search) {
