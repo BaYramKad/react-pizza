@@ -14,11 +14,7 @@ import Stack from '@mui/material/Stack';
 import qs from 'qs';
 
 import { paginationSelector, setPage } from '../toolkit/paginationSlice';
-import {
-  AsyncLoadType,
-  asyncLoadPizza,
-  pizzaLoadSelector,
-} from '../toolkit/asyncLoadPizza/asyncPizzaSlice';
+import { AsyncLoadType, asyncLoadPizza, pizzaLoadSelector } from '../toolkit/asyncLoadPizza/asyncPizzaSlice';
 import { filterSelector, setParseObjUrl } from '../toolkit/filterSlice';
 import { searchSelector } from '../toolkit/asyncSearchSlice/asyncSearch';
 import { useAppDispatch } from '../toolkit/store';
@@ -47,6 +43,7 @@ const Main: React.FC = () => {
 
     dispatch(asyncLoadPizza(search));
   };
+  console.log('Вкусная пицца');
 
   React.useEffect(() => {
     if (window.location.search) {
@@ -60,7 +57,7 @@ const Main: React.FC = () => {
               idC: +urlParse.category,
               isOrder: urlParse.order,
               sortType: urlParse.sortBy,
-            }),
+            })
           );
 
           isFetching.current = true;
@@ -91,9 +88,7 @@ const Main: React.FC = () => {
   }, [idC, isOrder, sortType, currentPage]);
 
   const sceleton = [...new Array(4)].map((_, i) => <CardPizzaSceleton key={i} />);
-  const arrayPizza = (searchPizza.length > 0 ? searchPizza : pizza).map((obj: CardPizzaType) => (
-    <CardPizza {...obj} />
-  ));
+  const arrayPizza = (searchPizza.length > 0 ? searchPizza : pizza).map((obj: CardPizzaType) => <CardPizza {...obj} />);
 
   if (error) {
     return <ErrorPage />;
@@ -101,12 +96,12 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <div className="content__top">
+      <div className='content__top'>
         <Categories />
         <SortPizza />
       </div>
-      <h2 className="content__title">{title && `${title} Пиццы`}</h2>
-      <div className="content__items">{loading ? sceleton : arrayPizza}</div>
+      <h2 className='content__title'>{title && `${title} Пиццы`}</h2>
+      <div className='content__items'>{loading ? sceleton : arrayPizza}</div>
 
       <Stack spacing={2}>
         <Pagination
@@ -119,7 +114,7 @@ const Main: React.FC = () => {
             };
           }}
           count={2}
-          color="primary"
+          color='primary'
         />
       </Stack>
     </>
